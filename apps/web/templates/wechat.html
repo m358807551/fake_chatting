@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/html2canvas.js') }}"></script>
+</head>
+<body>
+<div id="main">
+    <div id="head">
+        <div id="head-top1">
+            <div id="head-top1-left1">
+                <img src="{{ url_for('static', filename='images/head-left.jpeg') }} " alt="4g_logo">
+            </div>
+            <div id="head-top1-left2">15:03</div>
+            <div id="head-top1-left3">
+                <img src="{{ url_for('static', filename='images/head-right.jpeg') }} " alt="头像1">
+            </div>
+        </div>
+        <div id="head-top2">
+            <div id="head-top2-left1" >
+                <img src="{{ url_for('static', filename='images/left_jian.jpeg') }} " alt="头像1">
+            </div>
+            <div id="head-top2-room">
+                柠檬树下(6)
+            </div>
+            <div id="head-top2-threedot">
+                <img src="{{ url_for('static', filename='images/three_dot.png') }} " alt="头像1">
+            </div>
+        </div>
+        <div id="head-hengxian"></div>
+    </div>
+    <div id="content">
+        {% for line in data['lines'] %}
+            {# 自己发言#}
+            {% if line.speaker.type=='me' %}
+                <div class="line-right">
+                    <div class="line-right-touxiang">
+                        {% set filename='images/touxiang/' + line.speaker.img %}
+                        <img src="{{ url_for('static', filename=filename)}} " alt="头像1">
+                    </div>
+                    {# 如果是发文字 #}
+                    {% if line.content.type == 'text' %}
+                        <div class="line-right-sanjiao"></div>
+                        <div class="line-right-text">{{ line.content.text }}</div>
+                    {% else %}
+                        <div class="line-right-doutu">
+                            {% set filename='images/doutu/' + line.content.img %}
+                            <img src="{{ url_for('static', filename=filename) }} " alt="头像1">
+                        </div>
+                    {% endif %}
+                </div>
+            {# 他人发言 #}
+            {% else %}
+                <div class="line_left">
+                    <div class="touxiang">
+                        {% set filename='images/touxiang/' + line.speaker.img %}
+                        <img src="{{ url_for('static', filename=filename) }} " alt="头像1">
+                    </div>
+                    <div class="left-right">
+                        <div class="left_name">{{ line.speaker.name}}</div>
+                        <div class="left-right-down">
+                            {% if line.content.type == 'text' %}
+                                <div class="left-right-down-sanjiao"></div>
+                                <div class="left_text">{{ line.content.text }}</div>
+                            {% else %}
+                                <div class="left-right-down-doutu">
+                                    {% set filename='images/doutu/' + line.content.img %}
+                                    <img src="{{ url_for('static', filename=filename) }} " alt="头像1">
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+
+    </div>
+</div>
+</body>
+</html>
+
+<script type="text/javascript">
+     {#html2canvas(document.body).then(function(canvas) {#}
+     {#                       var dataUrl = canvas.toDataURL();#}
+     {#                       var newImg = document.createElement("img");#}
+     {#                       newImg.src =  dataUrl;#}
+     {#                       document.body.appendChild(newImg);#}
+     {#                   });#}
+</script>
+
+<style>
+    body{
+        padding: 0;
+        margin: 0;
+    }
+
+    #main{
+                {#border: 1px #080305 solid;#}
+        background-color: #eaeaea;
+        width: 375px;
+        height: 812px;
+        zoom: {{ zoom }}00%;
+    }
+
+    #content{
+        width: 375px;
+        height: 259px;
+        float: top;
+    }
+
+    #head{
+        {#border: 1px #080305 solid;#}
+        float: top;
+        margin-bottom: 10px;
+    }
+
+    #head-top1{
+        {#border: 1px #080305 solid;#}
+        overflow: hidden;
+        float: top;
+        padding-top: 7px;
+    }
+
+    #head-top2{
+        {#border: 1px #5191ff solid;#}
+        float: top;
+        margin-bottom: 15px;
+        overflow: hidden;
+        {#padding-top: 10px;#}
+    }
+
+    #head-top2-left1{
+        float: left;
+        margin-left: 12px;
+        margin-top: 19px;
+    }
+
+    #head-top2-left1 img{
+        max-height: 16px;
+    }
+
+    #head-top2-room{
+        float: left;
+        margin-top: 17px;
+        margin-left: 15px;
+    }
+
+    #head-top2-threedot{
+        float: right;
+        margin-top: 12px;
+        margin-right: 16px;
+        {#padding-bottom: 3px;#}
+    }
+
+    #head-top2-threedot img{
+        max-width: 18px;
+    }
+
+    #head-hengxian{
+        float: top;
+        border-top: solid #e5e5e5 1px;
+    }
+
+    #head-top1-left1{
+        {#border: 1px #080305 solid;#}
+        float: left;
+        margin-left: 20px;
+    }
+
+    #head-top1-left1 img{
+        max-height: 14px;
+    }
+    #head-top1-left2{
+        {#border: 1px #080305 solid;#}
+        color: #363636;
+        float: left;
+        font-size: 13px;
+        margin-left: 4px;
+        margin-top: 2px;
+    }
+    #head-top1-left3{
+        {#border: 1px #080305 solid;#}
+        float: right;
+        margin-right: 20px;
+    }
+
+    #head-top1-left3 img{
+        max-height: 14px;
+    }
+
+    .touxiang img{
+        {#border: 1px green solid;#}
+        border-radius: 3px;
+        max-width: 41px;
+        max-height: 41px;
+        float: left;
+    }
+
+    .line_left {
+        {#border: 1px blue solid;#}
+        {#clear: both;#}
+        margin-bottom: 14px;
+        margin-left: 10px;
+        overflow: hidden;
+    }
+
+    .left-right {
+        float: left;
+    }
+
+    .left_name{
+        color: #a3a3a3;
+        float: top;
+        font-family: "STSong", serif;
+        font-size: 10px;
+        margin-left: 10px;
+        margin-top: 1px;
+    }
+
+    .left-right-down{
+        {#border: 1px #54ff8e solid;#}
+        float: top;
+        overflow: hidden;
+    }
+
+    .left_text{
+        {#border: 1px red solid;#}
+        border-radius: 3px;
+        background-color: #ffffff;
+        float: left;
+        font-family: "STHeiti Light", serif;
+        font-size: 15px;
+        padding: 8px;
+        margin-top: 3px;
+    }
+
+    .left-right-down-sanjiao{
+        float: left;
+        width: 0;
+        height: 0;
+        border-width: 5px;
+        border-style: solid;
+        border-color: transparent #ffffff transparent transparent;
+        margin-top: 16px;
+    }
+
+    .left-right-down-doutu{
+        border-radius: 5px;
+        float: top;
+        margin-left: 10px;
+        margin-top: 3px;
+    }
+
+    .left-right-down-doutu img{
+        max-width: 144px;
+        max-height: 144px;
+    }
+
+    .line-right {
+        {#border: 1px red solid;#}
+        {#clear: both;#}
+        margin-bottom: 14px;
+        margin-right: 10px;
+        overflow: hidden;
+    }
+
+    .line-right-doutu{
+        float: right;
+        margin-right: 10px;
+    }
+
+    .line-right-doutu img{
+        max-height: 144px;
+        max-width: 144px;
+    }
+
+    .line-right-touxiang img{
+        {#border: 1px green solid;#}
+        border-radius: 3px;
+        max-width: 41px;
+        max-height: 41px;
+        float: right;
+    }
+
+    .line-right-text{
+        {#border: 1px red solid;#}
+        border-radius: 3px;
+        background-color: #92e648;
+        float: right;
+        font-family: "STHeiti Light", serif;
+        font-size: 15px;
+        padding: 8px;
+        margin-top: 3px;
+        max-width: 237px;
+        word-wrap:break-word;
+    }
+
+    .line-right-sanjiao{
+        float: right;
+        width: 0;
+        height: 0;
+        border-width: 5px;
+        border-style: solid;
+        border-color: transparent #92e648 transparent transparent;
+        margin-top: 16px;
+        transform: rotate(180deg);
+    }
+
+</style>
