@@ -2,64 +2,59 @@
 
 """核心内容."""
 import json
-
 from copy import deepcopy
 
-import imageio
 
-import requests
+def to_chattings():
+    """获得对话."""
+    return [
+        {
+            'speaker_name': '王凡凡',
+            'speaker_img': '王凡凡.jpeg',
+            'content': '人世几回伤往事',
+            'content_type': 'text',
+            'time': '18:06',
+        }
+    ]
 
 
-def make_images():
-    pass
+def to_jpegs(data):
+    """
+    data是个配置字典，决定要显示的内容.
 
-
-def screenshot_wechat(data, img_name):
-    """data是个配置字典，决定要显示的内容."""
+    data: {
+        'room_name': 'abc',
+        'chattings': [..., ...]
+    }
+    """
     import asyncio
     from pyppeteer import launch
 
     async def _main():
         browser = await launch({'headless': True})
         page = await browser.newPage()
-        url = 'http://127.0.0.1:5000/screenshot?data={data}'.format(data=json.dumps(data))
-        await page.goto(url)
-        quality = 100
-        await page.screenshot(
-            {'path': '{img_name}.jpeg'.format(img_name=img_name), 'type': 'jpeg', 'quality': quality, 'fullPage': True})
+        new_chattings = []
+        for i, chatting in enumerate(data['chattings']):
+            new_chattings.append(chatting)
+            new_data = {'room_name': data['room_name'], 'chattings': new_chattings}
+            url = 'http://127.0.0.1:5000/screenshot?data={0}'.format(json.dumps(new_data))
+            await page.goto(url)
+            quality = 100
+            await page.screenshot({
+                'path': '{0}.jpeg'.format(i),
+                'type': 'jpeg',
+                'quality': quality,
+                'fullPage': True,
+            })
         await browser.close()
 
     asyncio.get_event_loop().run_until_complete(_main())
 
 
-def create_gif(image_list, gif_name, duration=0.35):
-    frames = []
-    for image_name in image_list:
-        frames.append(imageio.imread(image_name))
-    imageio.mimsave(gif_name, frames, 'GIF', duration=duration)
-    return
-
-
 def main():
-    # image_list = ['0.jpeg', '1.jpeg']
-    # gif_name = 'aaa.gif'
-    # duration = 2
-    # create_gif(image_list, gif_name, duration)
-
-    import cv2
-
-    img_root = '/Users/myp/code/wechat_simulator/wechat_simulator/core'  # 这里写你的文件夹路径，比如：/home/youname/data/img/,注意最后一个文件夹要有斜杠
-    fps = 1  # 保存视频的FPS，可以适当调整
-    size = (375, 812)
-    # 可以用(*'DVIX')或(*'X264'),如果都不行先装ffmepg: sudo apt-get install ffmepg
-    fourcc = cv2.VideoWriter_fourcc('I', '4', '2', '0')
-    videoWriter = cv2.VideoWriter('3.avi', fourcc, fps, size)  # 最后一个是保存图片的尺寸
-
-    for i in range(5):
-        for _ in range(30):
-            frame = cv2.imread(img_root + str(i) + '.jpeg')
-            videoWriter.write(frame)
-    videoWriter.release()
+    """测试入口."""
+    data = {'room_name': 'ABCF', 'chattings': to_chattings()}
+    to_jpegs(data)
 
 
 def main2():
@@ -131,7 +126,7 @@ def main2():
     for i in range(len(data['lines'])):
         data_ = deepcopy(data)
         data_['lines'] = data['lines'][: i+1]
-        screenshot_wechat(data_, i)
+        to_jpegs(data_, i)
 
 
 if __name__ == '__main__':

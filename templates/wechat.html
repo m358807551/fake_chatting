@@ -22,7 +22,7 @@
                 <img src="{{ url_for('static', filename='images/left_jian.jpeg') }} " alt="头像1">
             </div>
             <div id="head-top2-room">
-                柠檬树下(6)
+                {{ data.room_name }}
             </div>
             <div id="head-top2-threedot">
                 <img src="{{ url_for('static', filename='images/three_dot.png') }} " alt="头像1">
@@ -31,21 +31,21 @@
         <div id="head-hengxian"></div>
     </div>
     <div id="content">
-        {% for line in data['lines'] %}
+        {% for line in data['chattings'] %}
             {# 自己发言#}
-            {% if line.speaker.type=='me' %}
+            {% if line.speaker_type=='me' %}
                 <div class="line-right">
                     <div class="line-right-touxiang">
-                        {% set filename='images/touxiang/' + line.speaker.img %}
+                        {% set filename='images/touxiang/' + line.speaker_img %}
                         <img src="{{ url_for('static', filename=filename)}} " alt="头像1">
                     </div>
                     {# 如果是发文字 #}
-                    {% if line.content.type == 'text' %}
+                    {% if line.content_type == 'text' %}
                         <div class="line-right-sanjiao"></div>
-                        <div class="line-right-text">{{ line.content.text }}</div>
+                        <div class="line-right-text">{{ line.content }}</div>
                     {% else %}
                         <div class="line-right-doutu">
-                            {% set filename='images/doutu/' + line.content.img %}
+                            {% set filename='images/doutu/' + line.content %}
                             <img src="{{ url_for('static', filename=filename) }} " alt="头像1">
                         </div>
                     {% endif %}
@@ -54,18 +54,18 @@
             {% else %}
                 <div class="line_left">
                     <div class="touxiang">
-                        {% set filename='images/touxiang/' + line.speaker.img %}
+                        {% set filename='images/touxiang/' + line.speaker_img %}
                         <img src="{{ url_for('static', filename=filename) }} " alt="头像1">
                     </div>
                     <div class="left-right">
-                        <div class="left_name">{{ line.speaker.name}}</div>
+                        <div class="left_name">{{ line.speaker_name}}</div>
                         <div class="left-right-down">
-                            {% if line.content.type == 'text' %}
+                            {% if line.content_type == 'text' %}
                                 <div class="left-right-down-sanjiao"></div>
-                                <div class="left_text">{{ line.content.text }}</div>
+                                <div class="left_text">{{ line.content }}</div>
                             {% else %}
                                 <div class="left-right-down-doutu">
-                                    {% set filename='images/doutu/' + line.content.img %}
+                                    {% set filename='images/doutu/' + line.content %}
                                     <img src="{{ url_for('static', filename=filename) }} " alt="头像1">
                                 </div>
                             {% endif %}
