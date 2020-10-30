@@ -81,12 +81,14 @@
 </html>
 
 <script type="text/javascript">
-     {#html2canvas(document.body).then(function(canvas) {#}
-     {#                       var dataUrl = canvas.toDataURL();#}
-     {#                       var newImg = document.createElement("img");#}
-     {#                       newImg.src =  dataUrl;#}
-     {#                       document.body.appendChild(newImg);#}
-     {#                   });#}
+     window.onload = function(){
+         x = document.getElementById('content');
+         max_height = document.getElementById('main').offsetHeight;
+         while (x.lastElementChild.offsetTop + x.lastElementChild.offsetHeight + 10 >= max_height) {
+             x.firstElementChild.remove();
+         }
+     };
+
 </script>
 
 <style>
@@ -233,6 +235,8 @@
         font-size: 15px;
         padding: 8px;
         margin-top: 3px;
+        max-width: 237px;
+        word-wrap:break-word;
     }
 
     .left-right-down-sanjiao{

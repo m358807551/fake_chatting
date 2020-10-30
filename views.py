@@ -5,6 +5,8 @@ import json
 
 from flask import Flask, render_template, request
 
+from core import xls_to_chattings
+
 app = Flask(
     __name__,
     static_folder='/Users/myp/code/fake_chatting/static',
@@ -19,7 +21,9 @@ def index():
     # 每行line都是一个对话
     # data_str = request.args['data']
     # data = json.loads(data_str)
-    return render_template('wechat.html', data={'lines': []}, zoom=1)
+    chattings = xls_to_chattings('测试用的对话')
+    data = {'room_name': 'ABCF', 'chattings': chattings}
+    return render_template('wechat.html', data=data, zoom=1)
 
 
 @app.route('/screenshot', methods=['GET'])

@@ -2,7 +2,13 @@
 
 """核心内容."""
 import json
+import os
 from copy import deepcopy
+
+import pandas as pd
+
+
+FOLDER_INPUT = '/Users/myp/code/fake_chatting/data/input'
 
 
 def to_chattings():
@@ -16,6 +22,21 @@ def to_chattings():
             'time': '18:06',
         }
     ]
+
+
+def xls_to_chattings(xls_name):
+    """从xls解析出对话."""
+    xls_name = xls_name.split('.xls')[0]
+    xls_path = os.path.join(FOLDER_INPUT, '{0}.xls'.format(xls_name))
+    df = pd.read_excel(xls_path)
+    df = df.rename(columns={'发言人': 'speaker_name', '内容': 'content'})
+    df['speaker_img'] = '王凡凡.jpeg'
+    df['content_type'] = 'text'
+    df['time'] = '18:06'
+    return df.to_dict('records')
+
+
+xls_to_chattings('测试用的对话')
 
 
 def to_jpegs(data):
@@ -35,6 +56,7 @@ def to_jpegs(data):
         page = await browser.newPage()
         new_chattings = []
         for i, chatting in enumerate(data['chattings']):
+            print(i)
             new_chattings.append(chatting)
             new_data = {'room_name': data['room_name'], 'chattings': new_chattings}
             url = 'http://127.0.0.1:5000/screenshot?data={0}'.format(json.dumps(new_data))
@@ -53,7 +75,8 @@ def to_jpegs(data):
 
 def main():
     """测试入口."""
-    data = {'room_name': 'ABCF', 'chattings': to_chattings()}
+    chattings = xls_to_chattings('测试用的对话')
+    data = {'room_name': 'ABCF', 'chattings': chattings}
     to_jpegs(data)
 
 
