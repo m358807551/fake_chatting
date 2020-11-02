@@ -12,7 +12,7 @@
             <div id="head-top1-left1">
                 <img src="{{ url_for('static', filename='images/head-left.jpeg') }} " alt="4g_logo">
             </div>
-            <div id="head-top1-left2">15:03</div>
+            <div id="head-top1-left2">{{ data['chattings'][-1].time }}</div>
             <div id="head-top1-left3">
                 <img src="{{ url_for('static', filename='images/head-right.jpeg') }} " alt="头像1">
             </div>

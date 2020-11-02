@@ -3,26 +3,12 @@
 """核心内容."""
 import json
 import os
-from copy import deepcopy
 
 import pandas as pd
 
 
 from settings import settings
 FOLDER_INPUT = '/Users/myp/code/fake_chatting/data/input'
-
-
-def to_chattings():
-    """获得对话."""
-    return [
-        {
-            'speaker_name': '王凡凡',
-            'speaker_img': '王凡凡.jpeg',
-            'content': '人世几回伤往事',
-            'content_type': 'text',
-            'time': '18:06',
-        }
-    ]
 
 
 def xls_to_chattings(xls_name):
@@ -34,7 +20,10 @@ def xls_to_chattings(xls_name):
     df['speaker_img'] = df['speaker_name'].apply(get_speaker_img)
     df['speaker_type'] = df['speaker_name'].apply(lambda x: 'me' if x == '我' else 'others')
     df['content_type'] = df['content'].apply(lambda x: 'img' if x.count('.') == 1 else 'text')
-    df['time'] = '18:06'
+    # 制定发言时间
+    m, _ = df.shape
+    df['time'] = pd.date_range(start='2020-01-01 18:06:00', freq='5S', periods=m)
+    df['time'] = df['time'].apply(lambda x: x.strftime('%H:%M'))
     return df.to_dict('records')
 
 
